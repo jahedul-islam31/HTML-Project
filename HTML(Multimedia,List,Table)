@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Programming || ID: E251031</title>
+</head>
+
+<body>
+    <h1>Multimedia</h1>
+    <hr>
+    <audio src="c:\Users\DELL\Downloads\file_example_MP3_1MG.mp3" controls="audio/mp3" type="audio/MP3"></audio>
+    <video src="c:\Users\DELL\Downloads\file_example_MOV_1280_1_4MB.mov" controls="video/mp4" type="video/MP3"></video>
+    <object data="Fourth version.pdf" type="application/pdf" width="400px" height="400px"></object>
+
+    <hr>
+
+
+    <h1> Example of Nested List</h1>
+    <hr>
+    <ol type="1">
+        <li>
+            <h3>Web Development</h3>
+
+        </li>
+        <ol type="A">
+
+            <li> Frontend</li>
+            <ul type="disc">
+                <li> HTML</li>
+                <li>CSS</li>
+                <li>JavaScript</li>
+            </ul>
+
+            <li> Backend</li>
+            <ul type="disc">
+                <li> Programming Language</li>
+
+                <ul type="circle">
+                    <li>Python</li>
+                </ul>
+
+                <li>FrameWork</li>
+                <ul type="circle">
+                    <li>Flask </li>
+                    <li>Django</li>
+                </ul>
+
+                <li>Query Language</li>
+                <ul type="circle">
+                    <li>SQLite</li>
+                    <li>MongoBD</li>
+                </ul>
+            </ul>
+        </ol>
+
+        <li>
+            <h3>Data Science</h3>
+        </li>
+
+        <ul type="disc">
+            <li>Data Analysis</li>
+            <li>Machine Learning</li>
+            <li>Deep Learning</li>
+        </ul>
+    </ol>
+    <h1>Table:</h1>
+    <hr>
+    <table border="2">
+        <tr>
+            <th colspan="4"> Purchase History</th>
+        </tr>
+        <tr>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th>Price (BDT)</th>
+            <th>Extended</th>
+        </tr>
+        <tr>
+            <td> Hard Drive (SSD) </td>
+            <td>1</td>
+            <td>2500</td>
+            <td>2500</td>
+        </tr>
+        <tr align="centare">
+            <td> Hard Drive (HDD)</td>
+            <td>1</td>
+            <td>3300</td>
+            <td>3150</td>
+        </tr>
+        <tr>
+            <td>RAM (DDR4-2667MHz) </td>
+            <td>2</td>
+            <td>1500</td>
+            <td>3000</td>
+        </tr>
+        <tr>
+            <td>Caddy (2.5 <sup>n</sup> Sata ) </td>
+            <td>1</td>
+            <td>350</td>
+            <td>300</td>
+
+        </tr>
+        <tr>
+            <th colspan="3">Total Amount</th>
+            <th>8950</th>
+        </tr>
+
+    </table>
+
+
+
+</body>
+
+</html>
