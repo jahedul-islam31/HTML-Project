@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CCE Air Ticket Reservation</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>✈ CCE AIR TICKET RESERVATION SYSTEM ✈</h1>
+  </header>
+
+  <main>
+    <section class="menu">
+      <button id="btnAddFlight">➕ Add Flight</button>
+      <button id="btnBook">🎫 Book Flight</button>
+      <button id="btnShowFlights">📋 Show Flights</button>
+      <button id="btnShowBookings">📖 Show Bookings</button>
+      <button id="btnCancelBooking">❌ Cancel Booking</button>
+      <button id="btnComingSoon">🚀 Coming Soon</button>
+    </section>
+
+    <section id="output"></section>
+  </main>
+
+  <!-- simple modal area -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-content">
+      <div id="modal-body"></div>
+      <div class="modal-actions">
+        <button id="modal-ok">OK</button>
+        <button id="modal-cancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>© CCE Airlines</footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
