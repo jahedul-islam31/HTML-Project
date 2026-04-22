@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAHIM_31 — Elite Fitness Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        brand: {
+                            black: '#0A0A0A',
+                            dark: '#111111',
+                            gray: '#1A1A1A',
+                            mid: '#2A2A2A',
+                            silver: '#B0B0B0',
+                            light: '#D4D4D4',
+                            orange: '#FF4D00',
+                            'orange-dark': '#CC3D00',
+                            'orange-glow': '#FF6A2A',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        ::selection { background: #FF4D00; color: #0A0A0A; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0A0A0A; }
+        ::-webkit-scrollbar-thumb { background: #2A2A2A; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #FF4D00; }
+        html { scroll-behavior: smooth; }
+
+        .noise-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 9999; opacity: 0.035;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            background-size: 128px 128px;
+        }
+
+        .img-bw {
+            filter: grayscale(100%) contrast(1.4) brightness(0.85);
+            transition: filter 0.5s ease;
+        }
+        .img-bw:hover {
+            filter: grayscale(40%) contrast(1.2) brightness(0.9);
+        }
+
+        .glow-orange {
+            box-shadow: 0 0 30px rgba(255, 77, 0, 0.3), 0 0 60px rgba(255, 77, 0, 0.1);
+        }
+
+        .text-glow {
+            text-shadow: 0 0 40px rgba(255, 77, 0, 0.4);
+        }
+
+        .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(255,77,0,0.3); }
+            50% { box-shadow: 0 0 40px rgba(255,77,0,0.6), 0 0 80px rgba(255,77,0,0.2); }
+        }
+        .animate-slide-up { animation: slideUp 0.8s ease-out forwards; }
+        .animate-fade-in { animation: fadeIn 0.6s ease-out forwards; }
+        .animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        .delay-400 { animation-delay: 0.4s; }
+        .delay-500 { animation-delay: 0.5s; }
+
+        .stat-border {
+            border-left: 2px solid #FF4D00;
+        }
+
+        .coach-card::before {
+            content: '';
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 3px;
+            background: linear-gradient(90deg, #FF4D00, transparent);
+            transform: scaleX(0); transform-origin: left;
+            transition: transform 0.5s ease;
+        }
+        .coach-card:hover::before { transform: scaleX(1); }
+
+        .program-card {
+            transition: all 0.4s ease;
+            border: 1px solid #2A2A2A;
+        }
+        .program-card:hover {
+            border-color: #FF4D00;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(255, 77, 0, 0.1);
+        }
+
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute; bottom: -2px; left: 0;
+            width: 0; height: 1px;
+            background: #FF4D00;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after { width: 100%; }
+
+        .marquee-track {
+            display: flex;
+            animation: marquee 30s linear infinite;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .transformation-slider {
+            position: relative;
+            overflow: hidden;
+            cursor: ew-resize;
+        }
+        .transformation-slider .after-img {
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            clip-path: inset(0 50% 0 0);
+        }
+    </style>
+</head>
+<body class="bg-brand-black text-brand-light font-sans antialiased">
+    <div class="noise-overlay"></div>
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300" style="background: rgba(10,10,10,0.85); backdrop-filter: blur(12px);">
+        <div class="max-w-7xl mx-auto px-4 lg:px-8">
+            <div class="flex items-center justify-between h-16 lg:h-20">
+                <!-- Logo -->
+                <a href="#" class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-brand-orange flex items-center justify-center rounded-sm">
+                        <span class="text-brand-black font-black text-sm">31</span>
+                    </div>
+                    <span class="text-white font-bold text-lg tracking-tight">FAHIM<span class="text-brand-orange">_</span>31</span>
+                </a>
+
+                <!-- Desktop Nav -->
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="#programs" class="nav-link text-xs font-semibold uppercase tracking-[0.15em] text-brand-silver hover:text-white transition-colors">Programs</a>
+                    <a href="#coaches" class="nav-link text-xs font-semibold uppercase tracking-[0.15em] text-brand-silver hover:text-white transition-colors">Coaches</a>
+                    <a href="#stories" class="nav-link text-xs font-semibold uppercase tracking-[0.15em] text-brand-silver hover:text-white transition-colors">Results</a>
+                    <a href="#community" class="nav-link text-xs font-semibold uppercase tracking-[0.15em] text-brand-silver hover:text-white transition-colors">Community</a>
+                </div>
+
+                <!-- CTA -->
+                <div class="flex items-center gap-4">
+                    <a href="#trial" class="hidden sm:inline-flex items-center gap-2 bg-brand-orange hover:bg-brand-orange-dark text-brand-black font-bold text-xs uppercase tracking-[0.1em] px-5 py-2.5 rounded-sm transition-all duration-200 hover:shadow-lg hover:shadow-brand-orange/20">
+                        Book Trial
+                        <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                    </a>
+                    <button id="mobile-toggle" class="md:hidden text-white">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-brand-mid">
+            <div class="px-4 py-4 space-y-3">
+                <a href="#programs" class="block text-xs font-semibold uppercase tracking-[0.15em] text-brand-silver hover:text-white py-2">Programs</a>
+                <a href="#coaches" class="block text-xs font-semibold uppercase tracking-[0.15em] text-brand-silver hover:text-white py-2">Coaches</a>
+                <a href="#stories" class="block text-xs font-semibold uppercase tracking-[0.15em] text-brand-silver hover:text-white py-2">Results</a>
+                <a href="#community" class="block text-xs font-semibold uppercase tracking-[0.15em] text-brand-silver hover:text-white py-2">Community</a>
+                <a href="#trial" class="block bg-brand-orange text-brand-black font-bold text-xs uppercase tracking-[0.1em] px-5 py-3 rounded-sm text-center mt-2">Book Trial</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-end overflow-hidden">
+        <!-- Background Image -->
+        <div class="absolute inset-0">
+            <img src="https://picsum.photos/seed/darkgym01/1920/1080.jpg" alt="Gym Interior" class="w-full h-full object-cover img-bw" style="filter: grayscale(100%) contrast(1.5) brightness(0.3);">
+            <div class="absolute inset-0 bg-gradient-to-t from-brand-black via-brand-black/60 to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-brand-black/80 to-transparent"></div>
+        </div>
+
+        <!-- Content -->
+        <div class="relative z-10 max-w-7xl mx-auto px-4 lg:px-8 pb-16 lg:pb-24 pt-32 w-full">
+            <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 items-end">
+                <!-- Left: Brand Statement -->
+                <div class="lg:col-span-7">
+                    <div class="flex items-center gap-3 mb-6 opacity-0 animate-slide-up">
+                        <div class="w-8 h-[1px] bg-brand-orange"></div>
+                        <span class="text-[10px] font-bold uppercase tracking-[0.3em] text-brand-orange">Elite Fitness Studio</span>
+                    </div>
+                    <h1 class="text-5xl sm:text-6xl lg:text-8xl font-black text-white leading-[0.9] tracking-tight mb-6 opacity-0 animate-slide-up delay-100">
+                        NO<br>
+                        <span class="text-brand-orange text-glow">EXCUSES.</span><br>
+                        JUST<br>
+                        RESULTS.
+                    </h1>
+                    <p class="text-sm lg:text-base text-brand-silver leading-relaxed max-w-md mb-8 opacity-0 animate-slide-up delay-200">
+                        Where discipline meets science. FAHIM_31 is not a gym — it's a training ground for those who refuse to be average. Every rep counts. Every session transforms.
+                    </p>
+                    <div class="flex flex-wrap gap-3 opacity-0 animate-slide-up delay-300">
+                        <a href="#trial" class="inline-flex items-center gap-2 bg-brand-orange hover:bg-brand-orange-dark text-brand-black font-bold text-xs uppercase tracking-[0.1em] px-7 py-3.5 rounded-sm transition-all duration-200 animate-pulse-glow">
+                            Start Your Transformation
+                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </a>
+                        <a href="#programs" class="inline-flex items-center gap-2 border border-brand-mid hover:border-brand-silver text-white font-semibold text-xs uppercase tracking-[0.1em] px-7 py-3.5 rounded-sm transition-all duration-200">
+                            View Programs
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right: Coach Team Strip -->
+                <div class="lg:col-span-5 opacity-0 animate-slide-up delay-400">
+                    <div class="bg-brand-gray/80 backdrop-blur-sm border border-brand-mid rounded-sm p-5">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-silver">Elite Coaching Team</span>
+                            <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-orange">5 Coaches</span>
+                        </div>
+                        <div class="flex gap-3">
+                            <div class="flex-1 group cursor-pointer">
+                                <div class="aspect-[3/4] rounded-sm overflow-hidden mb-2">
+                                    <img src="https://picsum.photos/seed/coach-male1/300/400.jpg" alt="Coach" class="w-full h-full object-cover img-bw group-hover:scale-105 transition-transform duration-500">
+                                </div>
+                                <p class="text-[10px] font-bold text-white uppercase tracking-wider">Fahim</p>
+                                <p class="text-[9px] text-brand-silver uppercase tracking-wider">Head Coach</p>
+                            </div>
+                            <div class="flex-1 group cursor-pointer">
+                                <div class="aspect-[3/4] rounded-sm overflow-hidden mb-2">
+                                    <img src="https://picsum.photos/seed/coach-female1/300/400.jpg" alt="Coach" class="w-full h-full object-cover img-bw group-hover:scale-105 transition-transform duration-500">
+                                </div>
+                                <p class="text-[10px] font-bold text-white uppercase tracking-wider">Sarah</p>
+                                <p class="text-[9px] text-brand-silver uppercase tracking-wider">Strength</p>
+                            </div>
+                            <div class="flex-1 group cursor-pointer">
+                                <div class="aspect-[3/4] rounded-sm overflow-hidden mb-2">
+                                    <img src="https://picsum.photos/seed/coach-male2/300/400.jpg" alt="Coach" class="w-full h-full object-cover img-bw group-hover:scale-105 transition-transform duration-500">
+                                </div>
+                                <p class="text-[10px] font-bold text-white uppercase tracking-wider">Marcus</p>
+                                <p class="text-[9px] text-brand-silver uppercase tracking-wider">HIIT</p>
+                            </div>
+                            <div class="hidden sm:block flex-1 group cursor-pointer">
+                                <div class="aspect-[3/4] rounded-sm overflow-hidden mb-2">
+                                    <img src="https://picsum.photos/seed/coach-male3/300/400.jpg" alt="Coach" class="w-full h-full object-cover img-bw group-hover:scale-105 transition-transform duration-500">
+                                </div>
+                                <p class="text-[10px] font-bold text-white uppercase tracking-wider">Alex</p>
+                                <p class="text-[9px] text-brand-silver uppercase tracking-wider">Boxing</p>
+                            </div>
+                            <div class="hidden lg:block flex-1 group cursor-pointer">
+                                <div class="aspect-[3/4] rounded-sm overflow-hidden mb-2">
+                                    <img src="https://picsum.photos/seed/coach-female2/300/400.jpg" alt="Coach" class="w-full h-full object-cover img-bw group-hover:scale-105 transition-transform duration-500">
+                                </div>
+                                <p class="text-[10px] font-bold text-white uppercase tracking-wider">Nina</p>
+                                <p class="text-[9px] text-brand-silver uppercase tracking-wider">Yoga/Flex</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-px mt-12 bg-brand-mid rounded-sm overflow-hidden opacity-0 animate-slide-up delay-500">
+                <div class="bg-brand-dark p-5 lg:p-6">
+                    <div class="text-3xl lg:text-4xl font-black text-white">500<span class="text-brand-orange">+</span></div>
+                    <div class="text-[10px] font-bold uppercase tracking-[0.15em] text-brand-silver mt-1">Active Members</div>
+                </div>
+                <div class="bg-brand-dark p-5 lg:p-6">
+                    <div class="text-3xl lg:text-4xl font-black text-white">12<span class="text-brand-orange">+</span></div>
+                    <div class="text-[10px] font-bold uppercase tracking-[0.15em] text-brand-silver mt-1">Years Experience</div>
+                </div>
+                <div class="bg-brand-dark p-5 lg:p-6">
+                    <div class="text-3xl lg:text-4xl font-black text-white">98<span class="text-brand-orange">%</span></div>
+                    <div class="text-[10px] font-bold uppercase tracking-[0.15em] text-brand-silver mt-1">Retention Rate</div>
+                </div>
+                <div class="bg-brand-dark p-5 lg:p-6">
+                    <div class="text-3xl lg:text-4xl font-black text-white">15K<span class="text-brand-orange">+</span></div>
+                    <div class="text-[10px] font-bold uppercase tracking-[0.15em] text-brand-silver mt-1">Sessions Delivered</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Marquee -->
+    <div class="bg-brand-orange py-2.5 overflow-hidden">
+        <div class="marquee-track whitespace-nowrap">
+            <span class="text-brand-black font-black text-xs uppercase tracking-[0.3em] mx-8">STRENGTH</span>
+            <span class="text-brand-black/40">◆</span>
+            <span class="text-brand-black font-black text-xs uppercase tracking-[0.3em] mx-8">DISCIPLINE</span>
+            <span class="text-brand-black/40">◆</span>
+            <span class="text-brand-black font-black text-xs uppercase tracking-[0.3em] mx-8">RESILIENCE</span>
+            <span class="text-brand-black/40">◆</span>
+            <span class="text-brand-black font-black text-xs uppercase tracking-[0.3em] mx-8">TRANSFORMATION</span>
+            <span class="text-brand-black/40">◆</span>
+            <span class="text-brand-black font-black text-xs uppercase tracking-[0.3em] mx-8">COMMUNITY</span>
+            <span class="text-brand-black/40">◆</span>
+            <span class="text-brand-black font-black text-xs uppercase tracking-[0.3em] mx-8">POWER</span>
+            <span class="text-brand-black/40">◆</span>
+            <span class="text-brand-black font-black text-xs uppercase tracking-[0.3em] mx-8">GRIT</span>
+            <span class="text-brand-black/40">◆</span>
+            <span class="text-brand-black font-black text-xs uppercase tracking-[0.3em] mx-8">STRENGTH</span>
+            <span class="text-brand-black/40">◆</span>
+            <span class="text-brand-black font-black text-xs uppercase tracking-[0.3em] mx-8">DISCIPLINE</span>
+            <span class="text-brand-black/40">◆</span>
+            <span class="text-brand-black font-black text-xs uppercase tracking-[0.3em] mx-8">RESILIENCE</span>
+            <span class="text-brand-black/40">◆</span>
+            <span class="text-brand-black font-black text-xs uppercase tracking-[0.3em] mx-8">TRANSFORMATION</span>
+            <span class="text-brand-black/40">◆</span>
+            <span class="text-brand-black font-black text-xs uppercase tracking-[0.3em] mx-8">COMMUNITY</span>
+            <span class="text-brand-black/40">◆</span>
+            <span class="text-brand-black font-black text-xs uppercase tracking-[0.3em] mx-8">POWER</span>
+            <span class="text-brand-black/40">◆</span>
+            <span class="text-brand-black font-black text-xs uppercase tracking-[0.3em] mx-8">GRIT</span>
+            <span class="text-brand-black/40">◆</span>
+        </div>
+    </div>
+
+    <!-- Programs Section -->
+    <section id="programs" class="py-16 lg:py-24 bg-brand-black">
+        <div class="max-w-7xl mx-auto px-4 lg:px-8">
+            <!-- Section Header -->
+            <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
+                <div>
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-6 h-[1px] bg-brand-orange"></div>
+                        <span class="text-[10px] font-bold uppercase tracking-[0.3em] text-brand-orange">Training Programs</span>
+                    </div>
+                    <h2 class="text-3xl lg:text-5xl font-black text-white tracking-tight">CHOOSE YOUR<br><span class="text-brand-silver">BATTLE.</span></h2>
+                </div>
+                <p class="text-xs text-brand-silver max-w-xs leading-relaxed">Every program is periodized, tracked, and coached. No guesswork. Just progressive overload and measurable results.</p>
+            </div>
+
+            <!-- Programs Grid -->
+            <div class="grid md:grid-cols-3 gap-4 lg:gap-5">
+                <!-- Muscle Gain -->
+                <div class="program-card bg-brand-dark rounded-sm overflow-hidden group cursor-pointer">
+                    <div class="aspect-[4/3] overflow-hidden relative">
+                        <img src="https://picsum.photos/seed/muscle-gym01/600/450.jpg" alt="Muscle Gain" class="w-full h-full object-cover img-bw group-hover:scale-105 transition-transform duration-700">
+                        <div class="absolute top-4 left-4">
+                            <span class="bg-brand-orange text-brand-black text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-sm">Most Popular</span>
+                        </div>
+                        <div class="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-brand-dark to-transparent"></div>
+                    </div>
+                    <div class="p-5 lg:p-6">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i data-lucide="dumbbell" class="w-4 h-4 text-brand-orange"></i>
+                            <h3 class="text-lg font-bold text-white uppercase tracking-tight">Muscle Gain</h3>
+                        </div>
+                        <p class="text-xs text-brand-silver leading-relaxed mb-4 line-clamp-3">Hypertrophy-focused programming with progressive overload. Compound lifts, isolation work, and nutrition protocols designed to build lean muscle mass in 12-16 week cycles.</p>
+                        <div class="space-y-2 mb-4">
+                            <div class="flex justify-between text-[10px] uppercase tracking-wider">
+                                <span class="text-brand-silver">Duration</span>
+                                <span class="text-white font-semibold">12-16 Weeks</span>
+                            </div>
+                            <div class="flex justify-between text-[10px] uppercase tracking-wider">
+                                <span class="text-brand-silver">Frequency</span>
+                                <span class="text-white font-semibold">4-5x / Week</span>
+                            </div>
+                            <div class="flex justify-between text-[10px] uppercase tracking-wider">
+                                <span class="text-brand-silver">Includes</span>
+                                <span class="text-white font-semibold">Nutrition Plan</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between pt-4 border-t border-brand-mid">
+                            <span class="text-white font-bold text-lg">₹4,999<span class="text-[10px] text-brand-silver font-normal uppercase tracking-wider">/mo</span></span>
+                            <span class="text-brand-orange text-xs font-semibold uppercase tracking-wider group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+                                Details <i data-lucide="arrow-right" class="w-3 h-3"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fat Loss -->
+                <div class="program-card bg-brand-dark rounded-sm overflow-hidden group cursor-pointer">
+                    <div class="aspect-[4/3] overflow-hidden relative">
+                        <img src="https://picsum.photos/seed/fatloss-run02/600/450.jpg" alt="Fat Loss" class="w-full h-full object-cover img-bw group-hover:scale-105 transition-transform duration-700">
+                        <div class="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-brand-dark to-transparent"></div>
+                    </div>
+                    <div class="p-5 lg:p-6">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i data-lucide="flame" class="w-4 h-4 text-brand-orange"></i>
+                            <h3 class="text-lg font-bold text-white uppercase tracking-tight">Fat Loss</h3>
+                        </div>
+                        <p class="text-xs text-brand-silver leading-relaxed mb-4 line-clamp-3">Metabolic resistance training combined with strategic cardio protocols. Calorie-deficit nutrition plans with weekly check-ins to ensure consistent fat loss while preserving muscle.</p>
+                        <div class="space-y-2 mb-4">
+                            <div class="flex justify-between text-[10px] uppercase tracking-wider">
+                                <span class="text-brand-silver">Duration</span>
+                                <span class="text-white font-semibold">8-12 Weeks</span>
+                            </div>
+                            <div class="flex justify-between text-[10px] uppercase tracking-wider">
+                                <span class="text-brand-silver">Frequency</span>
+                                <span class="text-white font-semibold">5-6x / Week</span>
+                            </div>
+                            <div class="flex justify-between text-[10px] uppercase tracking-wider">
+                                <span class="text-brand-silver">Includes</span>
+                                <span class="text-white font-semibold">Diet + Tracking</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between pt-4 border-t border-brand-mid">
+                            <span class="text-white font-bold text-lg">₹4,499<span class="text-[10px] text-brand-silver font-normal uppercase tracking-wider">/mo</span></span>
+                            <span class="text-brand-orange text-xs font-semibold uppercase tracking-wider group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+                                Details <i data-lucide="arrow-right" class="w-3 h-3"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Functional Fitness -->
+                <div class="program-card bg-brand-dark rounded-sm overflow-hidden group cursor-pointer">
+                    <div class="aspect-[4/3] overflow-hidden relative">
+                        <img src="https://picsum.photos/seed/functional-fit03/600/450.jpg" alt="Functional Fitness" class="w-full h-full object-cover img-bw group-hover:scale-105 transition-transform duration-700">
+                        <div class="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-brand-dark to-transparent"></div>
+                    </div>
+                    <div class="p-5 lg:p-6">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i data-lucide="zap" class="w-4 h-4 text-brand-orange"></i>
+                            <h3 class="text-lg font-bold text-white uppercase tracking-tight">Functional Fitness</h3>
+                        </div>
+                        <p class="text-xs text-brand-silver leading-relaxed mb-4 line-clamp-3">Build real-world strength and endurance. Combines Olympic lifting, gymnastics, metabolic conditioning, and mobility work for overall athletic performance.</p>
+                        <div class="space-y-2 mb-4">
+                            <div class="flex justify-between text-[10px] uppercase tracking-wider">
+                                <span class="text-brand-silver">Duration</span>
+                                <span class="text-white font-semibold">Ongoing</span>
+                            </div>
+                            <div class="flex justify-between text-[10px] uppercase tracking-wider">
+                                <span class="text-brand-silver">Frequency</span>
+                                <span class="text-white font-semibold">3-5x / Week</span>
+                            </div>
+                            <div class="flex justify-between text-[10px] uppercase tracking-wider">
+                                <span class="text-brand-silver">Includes</span>
+                                <span class="text-white font-semibold">Benchmark WODs</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between pt-4 border-t border-brand-mid">
+                            <span class="text-white font-bold text-lg">₹3,999<span class="text-[10px] text-brand-silver font-normal uppercase tracking-wider">/mo</span></span>
+                            <span class="text-brand-orange text-xs font-semibold uppercase tracking-wider group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+                                Details <i data-lucide="arrow-right" class="w-3 h-3"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Programs Strip -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4">
+                <div class="bg-brand-gray border border-brand-mid rounded-sm p-4 hover:border-brand-orange/50 transition-colors cursor-pointer group">
+                    <i data-lucide="swords" class="w-5 h-5 text-brand-orange mb-2"></i>
+                    <h4 class="text-xs font-bold text-white uppercase tracking-wider">Boxing</h4>
+                    <p class="text-[10px] text-brand-silver mt-1">Strike + Condition</p>
+                </div>
+                <div class="bg-brand-gray border border-brand-mid rounded-sm p-4 hover:border-brand-orange/50 transition-colors cursor-pointer group">
+                    <i data-lucide="heart-pulse" class="w-5 h-5 text-brand-orange mb-2"></i>
+                    <h4 class="text-xs font-bold text-white uppercase tracking-wider">HIIT</h4>
+                    <p class="text-[10px] text-brand-silver mt-1">30 Min Burn</p>
+                </div>
+                <div class="bg-brand-gray border border-brand-mid rounded-sm p-4 hover:border-brand-orange/50 transition-colors cursor-pointer group">
+                    <i data-lucide="wind" class="w-5 h-5 text-brand-orange mb-2"></i>
+                    <h4 class="text-xs font-bold text-white uppercase tracking-wider">Yoga</h4>
+                    <p class="text-[10px] text-brand-silver mt-1">Recovery + Flex</p>
+                </div>
+                <div class="bg-brand-gray border border-brand-mid rounded-sm p-4 hover:border-brand-orange/50 transition-colors cursor-pointer group">
+                    <i data-lucide="person-standing" class="w-5 h-5 text-brand-orange mb-2"></i>
+                    <h4 class="text-xs font-bold text-white uppercase tracking-wider">1-on-1</h4>
+                    <p class="text-[10px] text-brand-silver mt-1">Personal Coaching</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Coaches Section -->
+    <section id="coaches" class="py-16 lg:py-24 bg-brand-dark relative">
+        <div class="absolute inset-0 opacity-[0.03]" style="background-image: url('https://picsum.photos/seed/texture-metal/1920/1080.jpg'); background-size: cover;"></div>
+        <div class="relative max-w-7xl mx-auto px-4 lg:px-8">
+            <!-- Section Header -->
+            <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
+                <div>
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-6 h-[1px] bg-brand-orange"></div>
+                        <span class="text-[10px] font-bold uppercase tracking-[0.3em] text-brand-orange">The Team</span>
+                    </div>
+                    <h2 class="text-3xl lg:text-5xl font-black text-white tracking-tight">COACHED BY<br><span class="text-brand-silver">THE BEST.</span></h2>
+                </div>
+                <p class="text-xs text-brand-silver max-w-xs leading-relaxed">Every coach holds internationally recognized certifications and brings years of competitive and coaching experience to the floor.</p>
+            </div>
+
+            <!-- Coach Cards -->
+            <div class="space-y-4">
+                <!-- Coach 1 - Fahim -->
+                <div class="coach-card relative bg-brand-gray border border-brand-mid rounded-sm overflow-hidden group cursor-pointer">
+                    <div class="flex flex-col md:flex-row">
+                        <div class="md:w-64 lg:w-80 aspect-[4/3] md:aspect-auto overflow-hidden flex-shrink-0">
+                            <img src="https://picsum.photos/seed/fahim-coach-main/400/500.jpg" alt="Coach Fahim" class="w-full h-full object-cover img-bw group-hover:scale-105 transition-transform duration-700">
+                        </div>
+                        <div class="flex-1 p-5 lg:p-7 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-start justify-between mb-3">
+                                    <div>
+                                        <h3 class="text-xl lg:text-2xl font-black text-white uppercase tracking-tight">Fahim_31</h3>
+                                        <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-orange mt-0.5">Founder & Head Coach</p>
+                                    </div>
+                                    <span class="hidden sm:inline-flex items-center gap-1 bg-brand-mid text-brand-silver text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-sm">
+                                        <i data-lucide="star" class="w-3 h-3 text-brand-orange fill-brand-orange"></i> 12 YRS
+                                    </span>
+                                </div>
+                                <p class="text-xs text-brand-silver leading-relaxed mb-4 max-w-lg">Former national-level powerlifter with a sports science degree. Specializes in strength & conditioning and body recomposition. Has coached 200+ transformation clients. Known for an uncompromising approach to form and intensity.</p>
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    <span class="bg-brand-black border border-brand-mid text-brand-light text-[10px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-sm">ISSA Certified</span>
+                                    <span class="bg-brand-black border border-brand-mid text-brand-light text-[10px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-sm">NSCA-CSCS</span>
+                                    <span class="bg-brand-black border border-brand-mid text-brand-light text-[10px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-sm">Sports Science BSc</span>
+                                    <span class="bg-brand-black border border-brand-mid text-brand-light text-[10px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-sm">Precision Nutrition L2</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-6 pt-3 border-t border-brand-mid">
+                                <div class="stat-border pl-3">
+                                    <div class="text-lg font-black text-white">200<span class="text-brand-orange">+</span></div>
+                                    <div class="text-[9px] text-brand-silver uppercase tracking-wider">Transformations</div>
+                                </div>
+                                <div class="stat-border pl-3">
+                                    <div class="text-lg font-black text-white">4</div>
+                                    <div class="text-[9px] text-brand-silver uppercase tracking-wider">Competitions Won</div>
+                                </div>
+                                <div class="stat-border pl-3">
+                                    <div class="text-lg font-black text-white">15K</div>
+                                    <div class="text-[9px] text-brand-silver uppercase tracking-wider">Sessions Coached</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coach 2 & 3 Grid -->
+                <div class="grid md:grid-cols-2 gap-4">
+                    <!-- Coach 2 - Sarah -->
+                    <div class="coach-card relative bg-brand-gray border border-brand-mid rounded-sm overflow-hidden group cursor-pointer">
+                        <div class="aspect-[4/3] md:aspect-[16/10] overflow-hidden">
+                            <img src="https://picsum.photos/seed/sarah-strength/600/375.jpg" alt="Coach Sarah" class="w-full h-full object-cover img-bw group-hover:scale-105 transition-transform duration-700">
+                        </div>
+                        <div class="p-5">
+                            <div class="flex items-start justify-between mb-2">
+                                <div>
+                                    <h3 class="text-lg font-black text-white uppercase tracking-tight">Sarah Mitchell</h3>
+                                    <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-orange">Strength & Hypertrophy</p>
+                                </div>
+                            </div>
+                            <p class="text-[11px] text-brand-silver leading-relaxed mb-3 line-clamp-2">Bikini competitor turned coach. 8 years of experience in female-specific strength programming and posing prep.</p>
+                            <div class="flex flex-wrap gap-1.5 mb-3">
+                                <span class="bg-brand-black border border-brand-mid text-brand-light text-[9px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-sm">NASM-CPT</span>
+                                <span class="bg-brand-black border border-brand-mid text-brand-light text-[9px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-sm">PN1</span>
+                                <span class="bg-brand-black border border-brand-mid text-brand-light text-[9px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-sm">Bikini Pro</span>
+                            </div>
+                            <div class="flex gap-4 pt-3 border-t border-brand-mid">
+                                <div class="stat-border pl-3">
+                                    <div class="text-sm font-black text-white">80<span class="text-brand-orange">+</span></div>
+                                    <div class="text-[9px] text-brand-silver uppercase tracking-wider">Clients</div>
+                                </div>
+                                <div class="stat-border pl-3">
+                                    <div class="text-sm font-black text-white">8</div>
+                                    <div class="text-[9px] text-brand-silver uppercase tracking-wider">Years Exp</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Coach 3 - Marcus -->
+                    <div class="coach-card relative bg-brand-gray border border-brand-mid rounded-sm overflow-hidden group cursor-pointer">
+                        <div class="aspect-[4/3] md:aspect-[16/10] overflow-hidden">
+                            <img src="https://picsum.photos/seed/marcus-hiit/600/375.jpg" alt="Coach Marcus" class="w-full h-full object-cover img-bw group-hover:scale-105 transition-transform duration-700">
+                        </div>
+                        <div class="p-5">
+                            <div class="flex items-start justify-between mb-2">
+                                <div>
+                                    <h3 class="text-lg font-black text-white uppercase tracking-tight">Marcus Reed</h3>
+                                    <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-orange">HIIT & Conditioning</p>
+                                </div>
+                            </div>
+                            <p class="text-[11px] text-brand-silver leading-relaxed mb-3 line-clamp-2">Former collegiate athlete. Certified CrossFit L2 trainer with a passion for pushing metabolic limits and building mental toughness.</p>
+                            <div class="flex flex-wrap gap-1.5 mb-3">
+                                <span class="bg-brand-black border border-brand-mid text-brand-light text-[9px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-sm">CrossFit L2</span>
+                                <span class="bg-brand-black border border-brand-mid text-brand-light text-[9px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-sm">ACE-CPT</span>
+                                <span class="bg-brand-black border border-brand-mid text-brand-light text-[9px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-sm">Kettlebell Cert</span>
+                            </div>
+                            <div class="flex gap-4 pt-3 border-t border-brand-mid">
+                                <div class="stat-border pl-3">
+                                    <div class="text-sm font-black text-white">120<span class="text-brand-orange">+</span></div>
+                                    <div class="text-[9px] text-brand-silver uppercase tracking-wider">Clients</div>
+                                </div>
+                                <div class="stat-border pl-3">
+                                    <div class="text-sm font-black text-white">6</div>
+                                    <div class="text-[9px] text-brand-silver uppercase tracking-wider">Years Exp</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coach 4 & 5 Row -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="coach-card relative bg-brand-gray border border-brand-mid rounded-sm overflow-hidden group cursor-pointer">
+                        <div class="aspect-square overflow-hidden">
+                            <img src="https://picsum.photos/seed/alex-boxing-coach/400/400.jpg" alt="Coach Alex" class="w-full h-full object-cover img-bw group-hover:scale-105 transition-transform duration-700">
+                        </div>
+                        <div class="p-3">
+                            <h4 class="text-sm font-bold text-white uppercase tracking-tight">Alex Chen</h4>
+                            <p class="text-[9px] font-bold uppercase tracking-[0.15em] text-brand-orange">Boxing & MMA</p>
+                            <p class="text-[9px] text-brand-silver mt-1">Amateur MMA • 5 yrs coaching</p>
+                        </div>
+                    </div>
+                    <div class="coach-card relative bg-brand-gray border border-brand-mid rounded-sm overflow-hidden group cursor-pointer">
+                        <div class="aspect-square overflow-hidden">
+                            <img src="https://picsum.photos/seed/nina-yoga-coach/400/400.jpg" alt="Coach Nina" class="w-full h-full object-cover img-bw group-hover:scale-105 transition-transform duration-700">
+                        </div>
+                        <div class="p-3">
+                            <h4 class="text-sm font-bold text-white uppercase tracking-tight">Nina Patel</h4>
+                            <p class="text-[9px] font-bold uppercase tracking-[0.15em] text-brand-orange">Yoga & Mobility</p>
+                            <p class="text-[9px] text-brand-silver mt-1">RYT-500 • 7 yrs teaching</p>
+                        </div>
+                    </div>
+                    <div class="coach-card relative bg-brand-gray border border-brand-mid rounded-sm overflow-hidden group cursor-pointer hidden md:block">
+                        <div class="aspect-square overflow-hidden">
+                            <img src="https://picsum.photos/seed/rahul-rehab/400/400.jpg" alt="Coach Rahul" class="w-full h-full object-cover img-bw group-hover:scale-105 transition-transform duration-700">
+                        </div>
+                        <div class="p-3">
+                            <h4 class="text-sm font-bold text-white uppercase tracking-tight">Rahul Sharma</h4>
+                            <p class="text-[9px] font-bold uppercase tracking-[0.15em] text-brand-orange">Rehab & Prehab</p>
+                            <p class="text-[9px] text-brand-silver mt-1">MPT • CSCS • 4 yrs</p>
+                        </div>
+                    </div>
+                    <div class="bg-brand-mid/50 border border-brand-mid border-dashed rounded-sm aspect-square flex flex-col items-center justify-center hidden md:flex">
+                        <i data-lucide="plus" class="w-6 h-6 text-brand-silver mb-2"></i>
+                        <p class="text-[10px] font-bold uppercase tracking-wider text-brand-silver">Join the Team</p>
+                        <p class="text-[9px] text-brand-mid mt-0.5">We're hiring</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Member Stories / Transformations -->
+    <section id="stories" class="py-16 lg:py-24 bg-brand-black">
+        <div class="max-w-7xl mx-auto px-4 lg:px-8">
+            <!-- Section Header -->
+            <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
+                <div>
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-6 h-[1px] bg-brand-orange"></div>
+                        <span class="text-[10px] font-bold uppercase tracking-[0.3em] text-brand-orange">Real Results</span>
+                    </div>
+                    <h2 class="text-3xl lg:text-5xl font-black text-white tracking-tight">TRANSFORMATION<br><span class="text-brand-silver">SPEAKS.</span></h2>
+                </div>
+                <p class="text-xs text-brand-silver max-w-xs leading-relaxed">No stock photos. No fake testimonials. These are real members with real results, tracked and verified.</p>
+            </div>
+
+            <!-- Transformation Stories -->
+            <div class="space-y-4">
+                <!-- Story 1 - Featured -->
+                <div class="bg-brand-dark border border-brand-mid rounded-sm overflow-hidden group cursor-pointer hover:border-brand-orange/30 transition-colors">
+                    <div class="flex flex-col lg:flex-row">
+                        <div class="lg:w-2/5 flex gap-0.5 overflow-hidden">
+                            <div class="flex-1 aspect-[3/4] lg:aspect-auto overflow-hidden relative">
+                                <img src="https://picsum.photos/seed/before-male01/400/530.jpg" alt="Before" class="w-full h-full object-cover img-bw">
+                                <div class="absolute bottom-2 left-2 bg-brand-black/80 text-[9px] font-bold uppercase tracking-wider text-brand-silver px-2 py-0.5 rounded-sm">Before</div>
+                            </div>
+                            <div class="flex-1 aspect-[3/4] lg:aspect-auto overflow-hidden relative">
+                                <img src="https://picsum.photos/seed/after-male01/400/530.jpg" alt="After" class="w-full h-full object-cover img-bw">
+                                <div class="absolute bottom-2 left-2 bg-brand-orange/90 text-[9px] font-bold uppercase tracking-wider text-brand-black px-2 py-0.5 rounded-sm">After</div>
+                            </div>
+                        </div>
+                        <div class="flex-1 p-6 lg:p-8 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div class="w-10 h-10 bg-brand-orange rounded-full flex items-center justify-center">
+                                        <span class="text-brand-black font-black text-sm">RK</span>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-base font-bold text-white uppercase tracking-tight">Rahul Kumar</h3>
+                                        <p class="text-[10px] text-brand-silver uppercase tracking-wider">Member since 2022 • Muscle Gain Program</p>
+                                    </div>
+                                </div>
+                                <p class="text-xs text-brand-silver leading-relaxed mb-4">"I walked into FAHIM_31 at 58kg, couldn't do a single pull-up. 14 months later I'm 78kg, deadlifting 180kg, and I can see my abs for the first time in my life. Fahim doesn't let you skip sessions. He doesn't let you eat garbage. And that's exactly what I needed."</p>
+                                <div class="grid grid-cols-4 gap-3">
+                                    <div class="bg-brand-gray rounded-sm p-3 text-center">
+                                        <div class="text-lg font-black text-white">+20<span class="text-brand-orange text-sm">kg</span></div>
+                                        <div class="text-[8px] text-brand-silver uppercase tracking-wider">Weight</div>
+                                    </div>
+                                    <div class="bg-brand-gray rounded-sm p-3 text-center">
+                                        <div class="text-lg font-black text-white">14</div>
+                                        <div class="text-[8px] text-brand-silver uppercase tracking-wider">Months</div>
+                                    </div>
+                                    <div class="bg-brand-gray rounded-sm p-3 text-center">
+                                        <div class="text-lg font-black text-white">180<span class="text-brand-orange text-sm">kg</span></div>
+                                        <div class="text-[8px] text-brand-silver uppercase tracking-wider">Deadlift</div>
+                                    </div>
+                                    <div class="bg-brand-gray rounded-sm p-3 text-center">
+                                        <div class="text-lg font-black text-white">-8<span class="text-brand-orange text-sm">%</span></div>
+                                        <div class="text-[8px] text-brand-silver uppercase tracking-wider">Body Fat</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stories Grid -->
+                <div class="grid md:grid-cols-2 gap-4">
+                    <!-- Story 2 -->
+                    <div class="bg-brand-dark border border-brand-mid rounded-sm overflow-hidden group cursor-pointer hover:border-brand-orange/30 transition-colors">
+                        <div class="flex gap-0.5">
+                            <div class="w-1/2 aspect-square overflow-hidden relative">
+                                <img src="https://picsum.photos/seed/before-female02/400/400.jpg" alt="Before" class="w-full h-full object-cover img-bw">
+                                <div class="absolute bottom-2 left-2 bg-brand-black/80 text-[9px] font-bold uppercase tracking-wider text-brand-silver px-2 py-0.5 rounded-sm">Before</div>
+                            </div>
+                            <div class="w-1/2 aspect-square overflow-hidden relative">
+                                <img src="https://picsum.photos/seed/after-female02/400/400.jpg" alt="After" class="w-full h-full object-cover img-bw">
+                                <div class="absolute bottom-2 left-2 bg-brand-orange/90 text-[9px] font-bold uppercase tracking-wider text-brand-black px-2 py-0.5 rounded-sm">After</div>
+                            </div>
+                        </div>
+                        <div class="p-5">
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="w-7 h-7 bg-brand-mid rounded-full flex items-center justify-center">
+                                    <span class="text-white font-bold text-[10px]">PA</span>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white uppercase tracking-tight">Priya Agarwal</h4>
+                                    <p class="text-[9px] text-brand-silver uppercase tracking-wider">Fat Loss • 10 Weeks</p>
+                                </div>
+                            </div>
+                            <p class="text-[11px] text-brand-silver leading-relaxed line-clamp-2 mb-3">"Lost 12kg in 10 weeks while actually eating more than before. Sarah's programming was surgical. The community kept me accountable."</p>
+                            <div class="flex gap-4">
+                                <span class="text-xs font-black text-white">-12<span class="text-brand-orange text-[10px]">kg</span></span>
+                                <span class="text-xs font-black text-white">-9<span class="text-brand-orange text-[10px]">% BF</span></span>
+                                <span class="text-xs font-black text-white">10<span class="text-brand-orange text-[10px]"> wks</span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Story 3 -->
+                    <div class="bg-brand-dark border border-brand-mid rounded-sm overflow-hidden group cursor-pointer hover:border-brand-orange/30 transition-colors">
+                        <div class="flex gap-0.5">
+                            <div class="w-1/2 aspect-square overflow-hidden relative">
+                                <img src="https://picsum.photos/seed/before-male03/400/400.jpg" alt="Before" class="w-full h-full object-cover img-bw">
+                                <div class="absolute bottom-2 left-2 bg-brand-black/80 text-[9px] font-bold uppercase tracking-wider text-brand-silver px-2 py-0.5 rounded-sm">Before</div>
+                            </div>
+                            <div class="w-1/2 aspect-square overflow-hidden relative">
+                                <img src="https://picsum.photos/seed/after-male03/400/400.jpg" alt="After" class="w-full h-full object-cover img-bw">
+                                <div class="absolute bottom-2 left-2 bg-brand-orange/90 text-[9px] font-bold uppercase tracking-wider text-brand-black px-2 py-0.5 rounded-sm">After</div>
+                            </div>
+                        </div>
+                        <div class="p-5">
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="w-7 h-7 bg-brand-mid rounded-full flex items-center justify-center">
+                                    <span class="text-white font-bold text-[10px]">VK</span>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white uppercase tracking-tight">Vikram Khanna</h4>
+                                    <p class="text-[9px] text-brand-silver uppercase tracking-wider">Body Recomp • 16 Weeks</p>
+                                </div>
+                            </div>
+                            <p class="text-[11px] text-brand-silver leading-relaxed line-clamp-2 mb-3">"At 38, I thought my best years were behind me. FAHIM_31 proved me wrong. Gained 8kg muscle, lost 5kg fat. Feel 25 again."</p>
+                            <div class="flex gap-4">
+                                <span class="text-xs font-black text-white">+8<span class="text-brand-orange text-[10px]">kg M</span></span>
+                                <span class="text-xs font-black text-white">-5<span class="text-brand-orange text-[10px]">kg F</span></span>
+                                <span class="text-xs font-black text-white">16<span class="text-brand-orange text-[10px]"> wks</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- More Stories Strip -->
+                <div class="grid grid-cols-3 gap-3">
+                    <div class="bg-brand-gray border border-brand-mid rounded-sm p-4 text-center hover:border-brand-orange/50 transition-colors cursor-pointer">
+                        <div class="text-2xl font-black text-white">-15<span class="text-brand-orange">kg</span></div>
+                        <div class="text-[9px] text-brand-silver uppercase tracking-wider mt-1">Anita S. • 12 wks</div>
+                        <div class="text-[9px] text-brand-mid mt-0.5">"Life changing"</div>
+                    </div>
+                    <div class="bg-brand-gray border border-brand-mid rounded-sm p-4 text-center hover:border-brand-orange/50 transition-colors cursor-pointer">
+                        <div class="text-2xl font-black text-white">+14<span class="text-brand-orange">kg</span></div>
+                        <div class="text-[9px] text-brand-silver uppercase tracking-wider mt-1">Dev P. • 20 wks</div>
+                        <div class="text-[9px] text-brand-mid mt-0.5">"Best investment"</div>
+                    </div>
+                    <div class="bg-brand-gray border border-brand-mid rounded-sm p-4 text-center hover:border-brand-orange/50 transition-colors cursor-pointer">
+                        <div class="text-2xl font-black text-white">-22<span class="text-brand-orange">kg</span></div>
+                        <div class="text-[9px] text-brand-silver uppercase tracking-wider mt-1">Meera J. • 16 wks</div>
+                        <div class="text-[9px] text-brand-mid mt-0.5">"Never going back"</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Community Section -->
+    <section id="community" class="py-16 lg:py-24 bg-brand-dark relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-1/2 h-full opacity-5">
+            <img src="https://picsum.photos/seed/gym-community-bg/960/800.jpg" alt="" class="w-full h-full object-cover img-bw">
+        </div>
+        <div class="relative max-w-7xl mx-auto px-4 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+                <!-- Left Content -->
+                <div>
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-6 h-[1px] bg-brand-orange"></div>
+                        <span class="text-[10px] font-bold uppercase tracking-[0.3em] text-brand-orange">The Tribe</span>
+                    </div>
+                    <h2 class="text-3xl lg:text-5xl font-black text-white tracking-tight mb-5">YOU DON'T<br>TRAIN ALONE.</h2>
+                    <p class="text-xs text-brand-silver leading-relaxed mb-6">FAHIM_31 isn't just a place you go to sweat. It's a brotherhood. A sisterhood. A collective of people who show up when it's hard, who push each other, who celebrate every PR and every kilo lost together.</p>
+
+                    <div class="space-y-4 mb-8">
+                        <div class="flex items-start gap-3">
+                            <div class="w-8 h-8 bg-brand-mid rounded-sm flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <i data-lucide="users" class="w-4 h-4 text-brand-orange"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-white uppercase tracking-tight">Group Training Sessions</h4>
+                                <p class="text-[11px] text-brand-silver leading-relaxed">Shared suffering builds unbreakable bonds. Our group classes cap at 12 to keep intensity high and connections personal.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="w-8 h-8 bg-brand-mid rounded-sm flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <i data-lucide="message-circle" class="w-4 h-4 text-brand-orange"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-white uppercase tracking-tight">Private Community Chat</h4>
+                                <p class="text-[11px] text-brand-silver leading-relaxed">24/7 access to coaches and fellow members. Share meals, ask questions, celebrate wins. This is your support system.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="w-8 h-8 bg-brand-mid rounded-sm flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <i data-lucide="trophy" class="w-4 h-4 text-brand-orange"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-bold text-white uppercase tracking-tight">Monthly Challenges & Events</h4>
+                                <p class="text-[11px] text-brand-silver leading-relaxed">Lift-offs, endurance challenges, nutrition workshops, and social nights. We train hard and we play hard.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Community Grid -->
+                <div class="grid grid-cols-3 gap-2">
+                    <div class="aspect-square overflow-hidden rounded-sm">
+                        <img src="https://picsum.photos/seed/community-gym01/400/400.jpg" alt="Community" class="w-full h-full object-cover img-bw hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="aspect-square overflow-hidden rounded-sm">
+                        <img src="https://picsum.photos/seed/community-gym02/400/400.jpg" alt="Community" class="w-full h-full object-cover img-bw hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="aspect-square overflow-hidden rounded-sm">
+                        <img src="https://picsum.photos/seed/community-gym03/400/400.jpg" alt="Community" class="w-full h-full object-cover img-bw hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="aspect-square overflow-hidden rounded-sm">
+                        <img src="https://picsum.photos/seed/community-gym04/400/400.jpg" alt="Community" class="w-full h-full object-cover img-bw hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="aspect-square overflow-hidden rounded-sm relative">
+                        <img src="https://picsum.photos/seed/community-gym05/400/400.jpg" alt="Community" class="w-full h-full object-cover img-bw">
+                        <div class="absolute inset-0 bg-brand-black/70 flex flex-col items-center justify-center">
+                            <div class="text-2xl font-black text-brand-orange">500+</div>
+                            <div class="text-[9px] font-bold uppercase tracking-wider text-white">Members Strong</div>
+                        </div>
+                    </div>
+                    <div class="aspect-square overflow-hidden rounded-sm">
+                        <img src="https://picsum.photos/seed/community-gym06/400/400.jpg" alt="Community" class="w-full h-full object-cover img-bw hover:scale-110 transition-transform duration-500">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Book Trial CTA Section -->
+    <section id="trial" class="py-16 lg:py-24 bg-brand-black relative overflow-hidden">
+        <div class="absolute inset-0 opacity-[0.06]">
+            <img src="https://picsum.photos/seed/dark-equipment-texture/1920/800.jpg" alt="" class="w-full h-full object-cover img-bw">
+        </div>
+        <!-- Orange glow -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brand-orange/5 rounded-full blur-[120px]"></div>
+
+        <div class="relative max-w-3xl mx-auto px-4 lg:px-8 text-center">
+            <div class="flex items-center justify-center gap-3 mb-4">
+                <div class="w-6 h-[1px] bg-brand-orange"></div>
+                <span class="text-[10px] font-bold uppercase tracking-[0.3em] text-brand-orange">Take The First Step</span>
+                <div class="w-6 h-[1px] bg-brand-orange"></div>
+            </div>
+            <h2 class="text-4xl lg:text-6xl font-black text-white tracking-tight mb-4">YOUR FIRST CLASS<br>IS <span class="text-brand-orange text-glow">FREE.</span></h2>
+            <p class="text-sm text-brand-silver leading-relaxed mb-8 max-w-md mx-auto">No contracts. No commitments. Just show up, give it everything, and decide if you're ready to join the tribe. Walk in a stranger, walk out family.</p>
+
+            <!-- Trial Form -->
+            <form id="trial-form" class="max-w-md mx-auto space-y-3">
+                <div class="grid grid-cols-2 gap-3">
+                    <input type="text" placeholder="First Name" required class="bg-brand-gray border border-brand-mid rounded-sm px-4 py-3 text-xs text-white placeholder-brand-silver/50 focus:outline-none focus:border-brand-orange transition-colors">
+                    <input type="text" placeholder="Last Name" required class="bg-brand-gray border border-brand-mid rounded-sm px-4 py-3 text-xs text-white placeholder-brand-silver/50 focus:outline-none focus:border-brand-orange transition-colors">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <input type="email" placeholder="Email Address" required class="bg-brand-gray border border-brand-mid rounded-sm px-4 py-3 text-xs text-white placeholder-brand-silver/50 focus:outline-none focus:border-brand-orange transition-colors">
+                    <input type="tel" placeholder="Phone Number" required class="bg-brand-gray border border-brand-mid rounded-sm px-4 py-3 text-xs text-white placeholder-brand-silver/50 focus:outline-none focus:border-brand-orange transition-colors">
+                </div>
+                <select required class="w-full bg-brand-gray border border-brand-mid rounded-sm px-4 py-3 text-xs text-brand-silver focus:outline-none focus:border-brand-orange transition-colors appearance-none cursor-pointer">
+                    <option value="" disabled selected>Select Goal</option>
+                    <option value="muscle">Muscle Gain</option>
+                    <option value="fat-loss">Fat Loss</option>
+                    <option value="fitness">Functional Fitness</option>
+                    <option value="boxing">Boxing</option>
+                    <option value="general">General Fitness</option>
+                </select>
+                <button type="submit" class="w-full bg-brand-orange hover:bg-brand-orange-dark text-brand-black font-bold text-sm uppercase tracking-[0.1em] px-8 py-4 rounded-sm transition-all duration-200 glow-orange hover:shadow-[0_0_50px_rgba(255,77,0,0.4)] flex items-center justify-center gap-2">
+                    <span id="btn-text">Book Free Trial Class</span>
+                    <i data-lucide="arrow-right" class="w-4 h-4" id="btn-icon"></i>
+                    <svg id="btn-spinner" class="hidden animate-spin w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+                </button>
+            </form>
+
+            <!-- Success Message (hidden by default) -->
+            <div id="trial-success" class="hidden max-w-md mx-auto bg-brand-gray border border-brand-orange/50 rounded-sm p-6 mt-4">
+                <i data-lucide="check-circle" class="w-8 h-8 text-brand-orange mx-auto mb-3"></i>
+                <h3 class="text-lg font-bold text-white uppercase tracking-tight mb-1">You're In.</h3>
+                <p class="text-xs text-brand-silver leading-relaxed">We'll reach out within 24 hours to schedule your free trial. Check your inbox and get ready to work.</p>
+            </div>
+
+            <div class="flex items-center justify-center gap-6 mt-6 text-[10px] text-brand-silver uppercase tracking-wider">
+                <span class="flex items-center gap-1.5"><i data-lucide="shield-check" class="w-3 h-3 text-brand-orange"></i> No Commitment</span>
+                <span class="flex items-center gap-1.5"><i data-lucide="clock" class="w-3 h-3 text-brand-orange"></i> 60 Min Session</span>
+                <span class="flex items-center gap-1.5"><i data-lucide="user-check" class="w-3 h-3 text-brand-orange"></i> 1-on-1 Attention</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-brand-dark border-t border-brand-mid py-10 lg:py-14">
+        <div class="max-w-7xl mx-auto px-4 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8 mb-10">
+                <!-- Brand -->
+                <div class="md:col-span-1">
+                    <a href="#" class="flex items-center gap-2 mb-4">
+                        <div class="w-8 h-8 bg-brand-orange flex items-center justify-center rounded-sm">
+                            <span class="text-brand-black font-black text-sm">31</span>
+                        </div>
+                        <span class="text-white font-bold text-lg tracking-tight">FAHIM<span class="text-brand-orange">_</span>31</span>
+                    </a>
+                    <p class="text-[11px] text-brand-silver leading-relaxed mb-4">Elite fitness studio for those who refuse to be average. No shortcuts. No excuses. Just results.</p>
+                    <div class="flex gap-3">
+                        <a href="#" class="w-8 h-8 bg-brand-mid hover:bg-brand-orange rounded-sm flex items-center justify-center transition-colors group">
+                            <i data-lucide="instagram" class="w-4 h-4 text-brand-silver group-hover:text-brand-black transition-colors"></i>
+                        </a>
+                        <a href="#" class="w-8 h-8 bg-brand-mid hover:bg-brand-orange rounded-sm flex items-center justify-center transition-colors group">
+                            <i data-lucide="youtube" class="w-4 h-4 text-brand-silver group-hover:text-brand-black transition-colors"></i>
+                        </a>
+                        <a href="#" class="w-8 h-8 bg-brand-mid hover:bg-brand-orange rounded-sm flex items-center justify-center transition-colors group">
+                            <i data-lucide="twitter" class="w-4 h-4 text-brand-silver group-hover:text-brand-black transition-colors"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Programs -->
+                <div>
+                    <h4 class="text-[10px] font-bold uppercase tracking-[0.2em] text-white mb-4">Programs</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-xs text-brand-silver hover:text-brand-orange transition-colors">Muscle Gain</a></li>
+                        <li><a href="#" class="text-xs text-brand-silver hover:text-brand-orange transition-colors">Fat Loss</a></li>
+                        <li><a href="#" class="text-xs text-brand-silver hover:text-brand-orange transition-colors">Functional Fitness</a></li>
+                        <li><a href="#" class="text-xs text-brand-silver hover:text-brand-orange transition-colors">Boxing & MMA</a></li>
+                        <li><a href="#" class="text-xs text-brand-silver hover:text-brand-orange transition-colors">Personal Training</a></li>
+                    </ul>
+                </div>
+
+                <!-- Studio -->
+                <div>
+                    <h4 class="text-[10px] font-bold uppercase tracking-[0.2em] text-white mb-4">Studio</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-xs text-brand-silver hover:text-brand-orange transition-colors">About Us</a></li>
+                        <li><a href="#" class="text-xs text-brand-silver hover:text-brand-orange transition-colors">Coaches</a></li>
+                        <li><a href="#" class="text-xs text-brand-silver hover:text-brand-orange transition-colors">Facilities</a></li>
+                        <li><a href="#" class="text-xs text-brand-silver hover:text-brand-orange transition-colors">Careers</a></li>
+                        <li><a href="#" class="text-xs text-brand-silver hover:text-brand-orange transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact -->
+                <div>
+                    <h4 class="text-[10px] font-bold uppercase tracking-[0.2em] text-white mb-4">Find Us</h4>
+                    <div class="space-y-3">
+                        <div class="flex items-start gap-2">
+                            <i data-lucide="map-pin" class="w-3.5 h-3.5 text-brand-orange mt-0.5 flex-shrink-0"></i>
+                            <p class="text-xs text-brand-silver leading-relaxed">42, Gym District, Sector 15<br>New Delhi, 110001</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="clock" class="w-3.5 h-3.5 text-brand-orange flex-shrink-0"></i>
+                            <p class="text-xs text-brand-silver">Mon-Sat: 5AM - 10PM</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="phone" class="w-3.5 h-3.5 text-brand-orange flex-shrink-0"></i>
+                            <a href="tel:+919876543210" class="text-xs text-brand-silver hover:text-brand-orange transition-colors">+91 98765 43210</a>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="mail" class="w-3.5 h-3.5 text-brand-orange flex-shrink-0"></i>
+                            <a href="mailto:train@fahim31.com" class="text-xs text-brand-silver hover:text-brand-orange transition-colors">train@fahim31.com</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Bar -->
+            <div class="pt-6 border-t border-brand-mid flex flex-col sm:flex-row items-center justify-between gap-3">
+                <p class="text-[10px] text-brand-silver/60 uppercase tracking-wider">© 2025 FAHIM_31. All rights reserved. Train hard or go home.</p>
+                <div class="flex gap-4">
+                    <a href="#" class="text-[10px] text-brand-silver/60 hover:text-brand-silver uppercase tracking-wider transition-colors">Privacy</a>
+                    <a href="#" class="text-[10px] text-brand-silver/60 hover:text-brand-silver uppercase tracking-wider transition-colors">Terms</a>
+                    <a href="#" class="text-[10px] text-brand-silver/60 hover:text-brand-silver uppercase tracking-wider transition-colors">Refund Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top -->
+    <button id="back-to-top" class="fixed bottom-6 right-6 z-50 w-10 h-10 bg-brand-orange text-brand-black rounded-sm flex items-center justify-center opacity-0 translate-y-4 pointer-events-none transition-all duration-300 hover:bg-brand-orange-dark shadow-lg shadow-brand-orange/20">
+        <i data-lucide="chevron-up" class="w-5 h-5"></i>
+    </button>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Mobile Menu Toggle
+        const mobileToggle = document.getElementById('mobile-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Close mobile menu on link click
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                navbar.style.borderBottom = '1px solid #2A2A2A';
+            } else {
+                navbar.style.borderBottom = '1px solid transparent';
+            }
+        });
+
+        // Back to Top Button
+        const backToTop = document.getElementById('back-to-top');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 600) {
+                backToTop.style.opacity = '1';
+                backToTop.style.transform = 'translateY(0)';
+                backToTop.style.pointerEvents = 'auto';
+            } else {
+                backToTop.style.opacity = '0';
+                backToTop.style.transform = 'translateY(16px)';
+                backToTop.style.pointerEvents = 'none';
+            }
+        });
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Trial Form Submission
+        const trialForm = document.getElementById('trial-form');
+        const trialSuccess = document.getElementById('trial-success');
+        const btnText = document.getElementById('btn-text');
+        const btnIcon = document.getElementById('btn-icon');
+        const btnSpinner = document.getElementById('btn-spinner');
+
+        trialForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            // Show loading state
+            btnText.textContent = 'Booking...';
+            btnIcon.classList.add('hidden');
+            btnSpinner.classList.remove('hidden');
+
+            // Simulate API call
+            setTimeout(() => {
+                trialForm.classList.add('hidden');
+                trialSuccess.classList.remove('hidden');
+                lucide.createIcons();
+            }, 1500);
+        });
+
+        // Scroll-triggered animations (Intersection Observer)
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // Observe sections for scroll animation
+        document.querySelectorAll('#programs, #coaches, #stories, #community, #trial').forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(20px)';
+            section.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+            observer.observe(section);
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const offset = 80;
+                    const top = target.getBoundingClientRect().top + window.scrollY - offset;
+                    window.scrollTo({ top, behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
